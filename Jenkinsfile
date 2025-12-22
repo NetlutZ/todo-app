@@ -25,25 +25,25 @@ pipeline {
                 sh 'go build -o app'
             }
         }
-    }
 
-    stage('Build Backend Image') {
-        steps {
-            sh 'docker build -t $BACKEND_IMAGE:$TAG .'
+        stage('Build Backend Image') {
+            steps {
+                sh 'docker build -t $BACKEND_IMAGE:$TAG .'
+            }
         }
-    }
 
-    stage('Push Images') {
-        steps {
-            withCredentials([usernamePassword(
-                credentialsId: 'dockerhub-creds',
-                usernameVariable: 'DOCKER_USER',
-                passwordVariable: 'DOCKER_PASS'
-            )]) {
-                sh '''
-                  echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                  docker push $BACKEND_IMAGE:$TAG
-                '''
+        stage('Push Images') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh '''
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    docker push $BACKEND_IMAGE:$TAG
+                    '''
+                }
             }
         }
     }
