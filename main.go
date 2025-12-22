@@ -24,18 +24,17 @@ type Todo struct {
 var collection *mongo.Collection
 
 func main() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("Error Loading .env File : ", err)
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using environment variables")
 	}
 
-	if os.Getenv("ENV") != "production" {
-		// Load the .env file if not in production
-		err := godotenv.Load(".env")
-		if err != nil {
-			log.Fatal("Error loading .env file:", err)
-		}
-	}
+	// if os.Getenv("ENV") != "production" {
+	// 	// Load the .env file if not in production
+	// 	err := godotenv.Load(".env")
+	// 	if err != nil {
+	// 		log.Fatal("Error loading .env file:", err)
+	// 	}
+	// }
 
 	MONGODB_URI := os.Getenv("MONGODB_URI")
 	clientOptions := options.Client().ApplyURI(MONGODB_URI)
