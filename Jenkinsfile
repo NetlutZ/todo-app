@@ -1,10 +1,9 @@
 pipeline {
-    agent {
-        docker {
-            image 'golang:1.22'
-        }
-    }
+    agent any
 
+    tools {
+       go 'go-1.25.1'
+    }
 
     stages {
         stage('Checkout') {
