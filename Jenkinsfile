@@ -32,6 +32,16 @@ pipeline {
             }
         }
 
+        stage('Build Frontend Image') {
+            steps {
+                sh '''
+                  docker build \
+                    -t $FRONTEND_IMAGE:$TAG \
+                    ./client
+                '''
+            }
+        }
+
         stage('Push Images') {
             steps {
                 withCredentials([usernamePassword(
@@ -42,6 +52,7 @@ pipeline {
                     sh '''
                     echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                     docker push $BACKEND_IMAGE:$TAG
+                    docker push $FRONTEND_IMAGE:$TAG
                     '''
                 }
             }
